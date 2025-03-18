@@ -132,6 +132,7 @@
 
                     <a class="nav-link {{ request()->routeIs('reports.staff') ? 'active bg-warning text-dark' : '' }}" href="{{ route('reports.staff') }}">Staff Report</a>
                     <a class="nav-link {{ request()->routeIs('reports.account') ? 'active bg-warning text-dark' : '' }}" href="{{ route('reports.account') }}">Account Report</a>
+                    <a class="nav-link {{ request()->routeIs('reports.purchase') ? 'active bg-warning text-dark' : '' }}" href="{{ route('reports.purchase') }}">Purchase Report</a>
                 </nav>
             </div>
             <a class="nav-link collapsed {{ request()->is('kitchen_purchases/*','kitchen_purchases*') || request()->is('purchases/*','purchases*') ? 'active bg-warning text-dark' : '' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseInv">

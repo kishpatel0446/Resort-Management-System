@@ -3,12 +3,10 @@
 @section('content')
 
 <style>
-    /* Container spacing to adjust sidebar gap */
     .content-container {
-        margin-left: 20px; /* Adjust for proper spacing */
+        margin-left: 20px;
     }
 
-    /* Table styling */
     .table-container {
         background: white;
         border-radius: 12px;
@@ -42,7 +40,7 @@
         background: rgba(0, 123, 255, 0.1);
     }
 
-    
+
     .btn-add {
         display: inline-block;
         background: linear-gradient(135deg, #28A745, #218838);

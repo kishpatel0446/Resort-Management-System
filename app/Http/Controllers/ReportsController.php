@@ -12,6 +12,10 @@ use App\Models\SchoolBooking;
 use App\Models\Booking;
 use App\Models\AdminBooking;
 use App\Models\AgentBooking;
+use App\Models\KitchenPurchase;
+use App\Models\KitchenPurchaseItem;
+use App\Models\Purchase;
+use App\Models\PurchaseItem;
 
 
 class ReportsController extends Controller
@@ -370,5 +374,150 @@ class ReportsController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to update']);
         }
     }
+    public function purchaseReports()
+    {
+        $items = DB::table('kitchen_purchase_items')
+            ->select('item_name as name', 
+                DB::raw('SUM(qty) as total_quantity'), 
+                DB::raw('SUM(total_amount) as total_cost'))
+            ->groupBy('item_name')
+            ->union(
+                DB::table('purchase_items')
+                    ->select('item_name as name', 
+                        DB::raw('SUM(qty) as total_quantity'), 
+                        DB::raw('SUM(total_amount) as total_cost'))
+                    ->groupBy('item_name')
+            )
+            ->get();
+    
+        // Fetch Vendor-wise report from both purchases and kitchen_purchase tables
+        $vendors = DB::table('purchases')
+            ->select('vendor_name as name', 
+                DB::raw('COUNT(id) as total_purchases'), 
+                DB::raw('SUM(net_amount) as total_amount'))
+            ->groupBy('vendor_name')
+            ->union(
+                DB::table('kitchen_purchases')
+                    ->select('vendor_name as name', 
+                        DB::raw('COUNT(id) as total_purchases'), 
+                        DB::raw('SUM(net_amount) as total_amount'))
+                    ->groupBy('vendor_name')
+            )
+            ->get();
+    
+        
+        $purchases = DB::table('purchases')
+            ->selectRaw('DATE(created_at) as purchase_date, COUNT(id) as total_purchases, SUM(net_amount) as total_amount')
+            ->groupByRaw('DATE(created_at)')
+            ->union(
+                DB::table('kitchen_purchases')
+                    ->selectRaw('DATE(created_at) as purchase_date, COUNT(id) as total_purchases, SUM(net_amount) as total_amount')
+                    ->groupByRaw('DATE(created_at)')
+            )
+            ->union(
+                DB::table('purchase_items')
+                    ->selectRaw('DATE(created_at) as purchase_date, COUNT(id) as total_purchases, SUM(total_amount) as total_amount')
+                    ->groupByRaw('DATE(created_at)')
+            )
+            ->union(
+                DB::table('kitchen_purchase_items')
+                    ->selectRaw('DATE(created_at) as purchase_date, COUNT(id) as total_purchases, SUM(total_amount) as total_amount')
+                    ->groupByRaw('DATE(created_at)')
+            )
+            ->get();
+    
+        return view('reports.purchase_reports', compact('items', 'vendors', 'purchases'));
+    }
+    
+    public function vendorPurchases($vendor_name)
+    {
+        // Fetch purchases from `purchases` table
+        $purchases = DB::table('purchases')
+            ->where('vendor_name', $vendor_name)
+            ->select('id', 'created_at', 'net_amount')
+            ->get();
+    
+        // Fetch kitchen purchases from `kitchen_purchases` table
+        $kitchen_purchases = DB::table('kitchen_purchases')
+            ->where('vendor_name', $vendor_name)
+            ->select('id', 'created_at', 'net_amount')
+            ->get();
+    
+        // Fetch purchase items related to purchases
+        $purchase_items = DB::table('purchase_items')
+            ->whereIn('purchase_id', $purchases->pluck('id'))
+            ->select('purchase_id', 'item_name', 'rate', 'qty', 'total_amount')
+            ->get()
+            ->groupBy('purchase_id');
+    
+        // Fetch kitchen purchase items related to kitchen purchases
+        $kitchen_purchase_items = DB::table('kitchen_purchase_items')
+            ->whereIn('kitchen_purchase_id', $kitchen_purchases->pluck('id'))
+            ->select('kitchen_purchase_id', 'item_name', 'rate', 'qty', 'total_amount')
+            ->get()
+            ->groupBy('kitchen_purchase_id');
+    
+        return view('reports.vendor_purchases', compact(
+            'purchases', 'kitchen_purchases', 'vendor_name', 'purchase_items', 'kitchen_purchase_items'
+        ));
+    }
+    
+    public function getPurchaseItems(Request $request)
+{
+    $date = $request->input('date');
+
+    // Fetch kitchen purchases
+    $kitchenPurchases = DB::table('kitchen_purchases')
+        ->whereDate('created_at', $date)
+        ->get();
+
+    $totalKitchenPurchases = 0;
+    $totalKitchenAmount = 0;
+
+    foreach ($kitchenPurchases as $purchase) {
+        $purchase->items = DB::table('kitchen_purchase_items')
+            ->where('kitchen_purchase_id', $purchase->id)
+            ->get();
+
+        // Sum up kitchen purchase counts and amounts
+        $totalKitchenPurchases += $purchase->items->count();
+        $totalKitchenAmount += $purchase->items->sum('total_amount');
+    }
+
+    // Fetch regular purchases
+    $purchases = DB::table('purchases')
+        ->whereDate('created_at', $date)
+        ->get();
+
+    $totalPurchases = 0;
+    $totalAmount = 0;
+
+    foreach ($purchases as $purchase) {
+        $purchase->items = DB::table('purchase_items')
+            ->where('purchase_id', $purchase->id)
+            ->get();
+
+        // Sum up regular purchase counts and amounts
+        $totalPurchases += $purchase->items->count();
+        $totalAmount += $purchase->items->sum('total_amount');
+    }
+
+    
+    $grandTotalPurchases = $totalPurchases + $totalKitchenPurchases;
+    $grandTotalAmount = $totalAmount + $totalKitchenAmount;
+
+    return view('reports.partials.purchase_items', compact(
+        'purchases',
+        'kitchenPurchases',
+        'grandTotalPurchases',
+        'grandTotalAmount'
+    ))->render();
+
+    
+}
+
+    
+
+
 
 }

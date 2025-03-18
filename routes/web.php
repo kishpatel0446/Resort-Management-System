@@ -189,6 +189,10 @@ Route::get('/reports/investment/filter', [ReportsController::class, 'filterInves
 Route::get('/reports/expense/filter', [ReportsController::class, 'filterExpenseReport'])->name('reports.expense.filter');
 Route::get('reports/school-picnic/filter', [ReportsController::class, 'filterSchoolPicnic'])->name('reports.school.picnic.filter');
 Route::get('/reports/daily-booking/filter', [ReportsController::class, 'filterDailyBookings'])->name('reports.daily_booking.filter');
+Route::get('/reports/purchase', [ReportsController::class, 'purchaseReports'])->name('reports.purchase');
+Route::get('/reports/vendor/{vendor_name}', [ReportsController::class, 'vendorPurchases'])->name('reports.vendorPurchases');
+Route::get('/reports/getPurchaseItems', [ReportsController::class, 'getPurchaseItems'])->name('reports.getPurchaseItems');
+Route::get('/reports/date-wise', [ReportsController::class, 'dateWiseReport'])->name('reports.dateWise');
 
 Route::get('/daily-booking', [ReportsController::class, 'dailyBooking'])->name('reports.daily_booking');
 Route::get('/reports/admin-booking', [ReportsController::class, 'adminBooking'])->name('reports.admin_booking');
