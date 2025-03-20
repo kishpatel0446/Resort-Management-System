@@ -55,8 +55,13 @@
     }
 
     @keyframes fadeEffect {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 
     h2 {

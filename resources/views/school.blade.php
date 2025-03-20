@@ -185,8 +185,8 @@
     <div class="card-body">
         <h5 class="card-title">⚠️ Important Notes</h5>
         <ul class="list-unstyled mt-3 text-white text-start">
-            <li>🚸 The above package is for minimum group of 55 students.</li>
             <li>🎓 1 teacher complimentary for every 20 students.</li>
+            <li>👨‍🏫 Extra Teacher Charge: ₹400/- per teacher</li>
             <li>📅 Not available on weekends and holidays.</li>
             <li>🍽️ Menu subject to change.</li>
             <li>📝 Advance booking required.</li>

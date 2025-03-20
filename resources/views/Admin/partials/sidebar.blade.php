@@ -118,11 +118,11 @@
             </div>
 
 
-            <a class="nav-link collapsed {{ request()->is('reports/*') ? 'active bg-warning text-dark' : '' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReports">
+            <a class="nav-link collapsed {{ request()->is('reports/*','daily-booking') ? 'active bg-warning text-dark' : '' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReports">
                 <i class="fas fa-file-alt"></i>&nbsp; Reports
                 <i class="fas fa-angle-down sb-sidenav-collapse-arrow"></i>
             </a>
-            <div class="collapse {{ request()->is('reports/*') ? 'show' : '' }}" id="collapseReports">
+            <div class="collapse {{ request()->is('reports/*','daily-booking') ? 'show' : '' }}" id="collapseReports">
                 <nav class="sb-sidenav-menu-nested nav">
 
                     <a class="nav-link {{ request()->routeIs('reports.daily_booking', 'reports.admin_booking', 'reports.website_booking', 'reports.agent_booking', 'reports.school_picnic') ? 'active bg-warning text-dark' : '' }}"
@@ -130,7 +130,6 @@
                         Booking Report
                     </a>
 
-                    <a class="nav-link {{ request()->routeIs('reports.staff') ? 'active bg-warning text-dark' : '' }}" href="{{ route('reports.staff') }}">Staff Report</a>
                     <a class="nav-link {{ request()->routeIs('reports.account') ? 'active bg-warning text-dark' : '' }}" href="{{ route('reports.account') }}">Account Report</a>
                     <a class="nav-link {{ request()->routeIs('reports.purchase') ? 'active bg-warning text-dark' : '' }}" href="{{ route('reports.purchase') }}">Purchase Report</a>
                 </nav>

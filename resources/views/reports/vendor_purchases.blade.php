@@ -17,21 +17,22 @@
     }
 
     .table thead {
-        background:rgb(8, 0, 255);
+        background: rgb(8, 0, 255);
         color: white;
         font-weight: bold;
         text-transform: uppercase;
     }
 
     .table tbody tr:nth-child(even) {
-        background:rgb(240, 243, 247);
+        background: rgb(240, 243, 247);
     }
 
     .table tbody tr:hover {
         background: rgba(0, 123, 255, 0.1);
     }
 
-    th, td {
+    th,
+    td {
         padding: 12px;
         vertical-align: middle;
         text-align: center;

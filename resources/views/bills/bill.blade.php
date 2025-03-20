@@ -9,6 +9,7 @@
     h1 {
         text-align: center;
         text-transform: uppercase;
+        font-weight: bold;
     }
     .header, .footer {
         margin-bottom: 20px;
@@ -38,7 +39,6 @@
     .summary td {
         font-weight: bold;
     }
-    
     .footer{
         text-align: center;
     }
@@ -67,34 +67,29 @@
     }
 
     @media print {
-    @page {
-        margin: 0;
-        size: auto;
+        @page {
+            margin: 0;
+            size: auto;
+        }
+        body::before,
+        body::after {
+            display: none;
+        }
+        .sb-topnav, .sb-sidenav, .navbar-brand  {
+            display: none !important;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .print-button {
+            display: none !important;
+        }
     }
-
-    body::before,
-    body::after {
-        display: none;
-    }
-
-    .sb-topnav, .sb-sidenav, .navbar-brand  {
-        display: none !important;
-    }
-
-    body {
-        margin: 0;
-        padding: 0;
-    }
-    .print-button {
-        display: none !important;
-    }
-}
-
-
 </style>
 
 <body>
-
+<br><br><br>
 <h1>Invoice</h1>
 
 <div class="header">
@@ -106,10 +101,16 @@
     <b>From:</b><br>
     Ambik Riverside Camp & Resort, Kachholi, Dist: Navsari
 </div>
-
+@if ($bill->type == 'school_booking')
 <div style="margin-top: 10px;">
+    <b>School Name:</b><br>
+    {{ $bill->customer_name }}
+    @else
+    <div style="margin-top: 10px;">
     <b>Customer Name:</b><br>
     {{ $bill->customer_name }}
+    @endif
+
 </div>
 
 <table>
@@ -122,6 +123,28 @@
         </tr>
     </thead>
     <tbody>
+    @if ($bill->type == 'school_booking')
+        <tr>
+            <td>Students</td>
+            <td>{{ $bill->kids }}</td> {{-- Kids = Students --}}
+            <td>{{ $bill->rate_kids }}</td>
+            <td>{{ $bill->total_kids }}</td>
+        </tr>
+        <tr>
+            <td>Teachers</td>
+            <td>{{ floor($bill->kids / 20) }}</td> {{-- Complimentary Teachers --}}
+            <td>Complimentary (1 per 20 students)</td>
+            <td>0</td>
+        </tr>
+        @if ($bill->extra_teachers > 0)
+            <tr>
+                <td>Extra Teachers</td>
+                <td>{{ $bill->extra_teachers }}</td>
+                <td>400</td>
+                <td>{{ $bill->extra_teachers * 400 }}</td>
+            </tr>
+        @endif
+    @else
         <tr>
             <td>Kids</td>
             <td>{{ $bill->kids }}</td>
@@ -134,11 +157,9 @@
             <td>{{ $bill->rate_adults }}</td>
             <td>{{ $bill->total_adults }}</td>
         </tr>
-        <tr>
-            <td><b>Time Slot:</b></td>
-            <td colspan="3">{{ $bill->time_slot }}</td> 
-        </tr>
-    </tbody>
+    @endif
+</tbody>
+
     <tfoot>
         <tr class="summary">
             <td colspan="3" class="text-end">Total Amount</td>
@@ -162,8 +183,6 @@
 <div class="footer">
     <b>Thank you for choosing Ambik Riverside Camp & Resort!</b>
 </div>
-
-
 
 </body>
 @endsection

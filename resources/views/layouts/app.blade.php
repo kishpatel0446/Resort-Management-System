@@ -143,27 +143,48 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="/">Home</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('perks') ? 'active' : '' }}" href="/perks">Packages</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('school') ? 'active' : '' }}" href="/school">School Picnic</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('gallary') ? 'active' : '' }}" href="/gallary">Gallery</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('contact') ? 'active' : '' }}" href="/contact">Contact Us</a>
+        </li>
+        <li class="nav-item">
+            <a class="btn call-btn" href="tel:+9824999968" role="button"><i class="fas fa-phone"></i> Call US</a>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user"></i> 
+                {{ session()->has('user') ? session('user')['name'] : 'Guest' }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                @if(session()->has('user'))
+                    <li><a class="dropdown-item" href="{{ route('view.bookings') }}"><i class="fas fa-book"></i> View Bookings</a></li>
+                    <li>
+                        <form action="{{ route('user.logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                        </form>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('perks') ? 'active' : '' }}" href="/perks">Packages</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('school') ? 'active' : '' }}" href="/school">School Picnic</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('gallary') ? 'active' : '' }}" href="/gallary">Gallery</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::is('contact') ? 'active' : '' }}" href="/contact">Contact Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn call-btn" href="tel:+9824999968" role="button"><i class="fas fa-phone"></i> Call US</a>
-                    </li>
-                </ul>
-            </div>
+                @else
+                    <li><a class="dropdown-item" href="{{ route('user.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                @endif
+            </ul>
+        </li>
+    </ul>
+</div>
+
         </div>
     </nav>
 
@@ -184,6 +205,31 @@
         });
     </script>
     @endif
+    
+    @if(session('logout'))
+    <script>
+        Swal.fire({
+            icon: 'info',
+            title: 'Logged Out!',
+            confirmButtonText: 'OK',
+            timer: 5000
+        });
+    </script>
+    @endif
+
+    @if(session('login'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '🔓 Logged In Successfully!',
+            confirmButtonText: 'OK',
+            timer: 5000
+        });
+    </script>
+@endif
+
+
+    
 
     @if(session('enquired'))
     <script>

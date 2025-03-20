@@ -27,6 +27,8 @@ use App\Http\Controllers\DailyExpenseController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PackageController;
+use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\UserLoginController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -48,10 +50,14 @@ Route::get('/inquiries', [EnquiryController::class, 'index'])->name('inquiries.i
 Route::put('/inquiries/{id}/handled', [EnquiryController::class, 'markHandled'])->name('inquiries.markHandled');
 
 
+
 Route::get('/bookings', [BookingController::class, 'showBookingForm'])->name('bookings');
+Route::get('/schoolbooking', [SchoolBookingController::class, 'showBookingForm'])->name('schoolbooking');
+
+
 Route::post('submit-booking', [BookingController::class, 'store'])->name('submit.booking');
 
-Route::get('/schoolbooking', [SchoolBookingController::class, 'showBookingForm'])->name('schoolbooking');
+
 Route::post('submit-schoolbooking', [SchoolBookingController::class, 'store'])->name('submit.schoolbooking');
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -86,7 +92,8 @@ Route::get('/bills/generate', [BillController::class, 'generateBill'])->name('ge
 Route::get('/bills/{bill}', [BillController::class, 'show'])->name('bills.show');
 
 Route::get('/invoice/{bill}', [InvoiceController::class, 'showInvoice'])->name('invoice.show');
-Route::get('/invoice/create/{bookingId}', [InvoiceController::class, 'createInvoice'])->name('invoice.create');
+Route::get('/invoice/create/{bookingId}/{type?}', [InvoiceController::class, 'createInvoice'])->name('invoice.create');
+
 
 Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
 Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.addstaff');
@@ -172,7 +179,7 @@ Route::resource('daily-expenses', DailyExpenseController::class);
 
 
 Route::prefix('reports')->group(function () {
-    
+
     Route::get('/school-picnic', [ReportsController::class, 'schoolPicnic'])->name('reports.school_picnic');
     Route::get('/daily-booking', [ReportsController::class, 'dailyBooking'])->name('reports.daily_booking');
     Route::get('/agent-booking', [ReportsController::class, 'agentBooking'])->name('reports.agent_booking');
@@ -213,3 +220,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::get('/perks', [PackageController::class, 'showPackages']);
 Route::get('/', [PackageController::class, 'showHome'])->name('welcome');
+
+Route::get('/view-bookings', [BookingController::class, 'viewBookingForm'])->name('view.bookings');
+Route::get('/fetch-bookings', [BookingController::class, 'fetchBookings'])->name('fetch.bookings');
+
+
+Route::get('/debug-otp', function () {
+    return Session::get('otp');
+});
+
+
+Route::get('/login', [UserLoginController::class, 'showLoginForm'])->name('user.login');
+Route::post('/login', [UserLoginController::class, 'login']);
+Route::get('/register', [UserLoginController::class, 'showRegisterForm'])->name('user.registerform');
+Route::post('/register', [UserLoginController::class, 'store'])->name('user.register');
+
+Route::post('/verify-register-otp', [UserLoginController::class, 'verifyRegisterOtp'])->name('user.verifyRegisterOtp');
+Route::post('/verify-login-otp', [UserLoginController::class, 'verifyLoginOtp'])->name('user.verifyLoginOtp');
+
+Route::post('/logout', [UserLoginController::class, 'logout'])->name('user.logout');

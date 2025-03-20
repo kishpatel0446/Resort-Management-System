@@ -7,23 +7,23 @@
         </tr>
     </thead>
     <tbody>
-        @php 
-            $uniqueDates = [];
+        @php
+        $uniqueDates = [];
         @endphp
         @foreach($purchases as $purchase)
-            @if(!in_array($purchase->purchase_date, $uniqueDates))
-                @php $uniqueDates[] = $purchase->purchase_date; @endphp
-                <tr class="purchase-row" data-date="{{ $purchase->purchase_date }}">
-                    <td>{{ $purchase->purchase_date }}</td>
-                    <td colspan="2" class="text-center clickable">Click to view</td>
-                </tr>
-                <tr class="item-details" id="items-{{ $purchase->purchase_date }}" style="display: none;">
-                    <td colspan="3">
-                        <div class="loading-text">Loading...</div>
-                        <div class="items-content"></div>
-                    </td>
-                </tr>
-            @endif
+        @if(!in_array($purchase->purchase_date, $uniqueDates))
+        @php $uniqueDates[] = $purchase->purchase_date; @endphp
+        <tr class="purchase-row" data-date="{{ $purchase->purchase_date }}">
+            <td>{{ $purchase->purchase_date }}</td>
+            <td colspan="2" class="text-center clickable">Click to view</td>
+        </tr>
+        <tr class="item-details" id="items-{{ $purchase->purchase_date }}" style="display: none;">
+            <td colspan="3">
+                <div class="loading-text">Loading...</div>
+                <div class="items-content"></div>
+            </td>
+        </tr>
+        @endif
         @endforeach
     </tbody>
 </table>
@@ -48,7 +48,9 @@
                     $.ajax({
                         url: "/reports/getPurchaseItems",
                         method: "GET",
-                        data: { date: date },
+                        data: {
+                            date: date
+                        },
                         beforeSend: function() {
                             detailsRow.find(".loading-text").show();
                         },

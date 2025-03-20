@@ -4,11 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use App\Models\SchoolBooking;
+use App\Models\AdminBooking;
+use App\Models\AgentBooking;
+use Illuminate\Support\Facades\Auth;
+
 
 class BookingController extends Controller
 {
-    public function showBookingForm()
+    public function showBookingForm(Request $request)
     {
+        if (!session()->has('user')) {
+            return redirect()->route('user.login')->with('error', 'Please login first.');
+        }
         return view('bookings');
     }
 
@@ -23,15 +34,15 @@ class BookingController extends Controller
             'kids' => 'required|integer|min:0',
             'adl' => 'required|integer|min:0',
         ]);
-    
+
         $rates = $this->getRatesByTimeSlot($validated['time']);
-    
+
         $total_kids = $validated['kids'] * ($rates['rate_adults'] * 0.7);
         $total_adults = $validated['adl'] * $rates['rate_adults'];
         $total_amount = $total_kids + $total_adults;
         $discount = 0;
         $net_amount = $total_amount - $discount;
-    
+
         $booking = Booking::create([
             'name' => $validated['name'],
             'cn' => $validated['mo'],
@@ -48,13 +59,13 @@ class BookingController extends Controller
             'netamount' => $net_amount,
             'Status' => 'Pending',
         ]);
-    
+
         session()->flash('success', 'Booking confirmed!');
-    
-        return redirect()->route('invoice.create', ['bookingId' => $booking->id]);
+
+        return redirect()->route('invoice.create', ['bookingId' => $booking->id, 'type' => 'booking']);
     }
-    
-  
+
+
     private function getRatesByTimeSlot($timeSlot)
     {
         switch ($timeSlot) {
@@ -70,5 +81,80 @@ class BookingController extends Controller
                 return ['rate_adults' => 0];
         }
     }
-    
+
+    public function viewBookingForm()
+    {
+        return view('view_bookings');
+    }
+
+
+    public function fetchBookings(Request $request)
+    {
+        $phone = session('user')['mobile'];
+
+        $bookings = Booking::where('cn', $phone)->orderBy('date', 'desc')->get()->map(function ($b) {
+            return [
+                'id' => $b->id,
+                'name' => $b->name,
+                'cn' => $b->cn,
+                'date' => $b->date,
+                'adults' => $b->adults,
+                'kids' => $b->kids,
+                'netamount' => $b->netamount,
+                'type' => 'Online Booking'
+            ];
+        });
+
+        $adminBookings = AdminBooking::where('cn', $phone)->orderBy('date', 'desc')->get()->map(function ($b) {
+            return [
+                'id' => $b->id,
+                'name' => $b->name,
+                'cn' => $b->cn,
+                'date' => $b->date,
+                'adults' => $b->adults,
+                'kids' => $b->kids,
+                'netamount' => $b->netamount,
+                'type' => 'Offline Booking'
+            ];
+        });
+
+        $agentBookings = AgentBooking::where('cn', $phone)->orderBy('date', 'desc')->get()->map(function ($b) {
+            return [
+                'id' => $b->id,
+                'name' => $b->agentname,
+                'cn' => $b->cn,
+                'date' => $b->date,
+                'adults' => $b->adults,
+                'kids' => $b->kids,
+                'netamount' => $b->netamount,
+                'type' => 'Agent Booking'
+            ];
+        });
+
+        $schoolBookings = SchoolBooking::where('cn', $phone)->orderBy('date', 'desc')->get()->map(function ($b) {
+            return [
+                'id' => $b->id,
+                'name' => $b->sname,
+                'cn' => $b->cn,
+                'date' => $b->date,
+                'adults' => $b->teacher,
+                'kids' => $b->stud,
+                'netamount' => $b->netamount,
+                'type' => 'School Booking'
+            ];
+        });
+
+        $allBookings = collect()
+            ->concat($bookings)
+            ->concat($adminBookings)
+            ->concat($agentBookings)
+            ->concat($schoolBookings)
+            ->sortByDesc('date')
+            ->values();
+
+        return response()->json([
+            'success' => true,
+            'bookings' => $allBookings
+        ]);
+    }
 }

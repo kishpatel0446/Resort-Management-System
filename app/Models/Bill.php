@@ -10,13 +10,13 @@ class Bill extends Model
     
     use HasFactory;
 
-    // Fillable attributes for mass assignment
     protected $fillable = [
         'customer_name',
         'contact_no',
         'booking_date',
         'time_slot',
         'kids',
+        'extra_teachers',
         'rate_kids',
         'total_kids',
         'adults',
@@ -25,5 +25,6 @@ class Bill extends Model
         'total_amount',
         'discount',
         'net_amount',
+        'type',
     ];
 }
