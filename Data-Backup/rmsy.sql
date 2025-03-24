@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2025 at 09:50 AM
+-- Generation Time: Mar 24, 2025 at 07:53 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -184,6 +184,7 @@ CREATE TABLE `bills` (
   `booking_date` date NOT NULL,
   `time_slot` varchar(255) NOT NULL,
   `kids` int(11) NOT NULL,
+  `extra_teachers` int(11) NOT NULL DEFAULT 0,
   `rate_kids` decimal(8,2) NOT NULL,
   `total_kids` decimal(8,2) NOT NULL,
   `adults` int(11) NOT NULL,
@@ -192,6 +193,7 @@ CREATE TABLE `bills` (
   `total_amount` decimal(8,2) NOT NULL,
   `discount` decimal(8,2) DEFAULT 0.00,
   `net_amount` decimal(8,2) NOT NULL,
+  `type` varchar(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -200,39 +202,45 @@ CREATE TABLE `bills` (
 -- Dumping data for table `bills`
 --
 
-INSERT INTO `bills` (`id`, `customer_name`, `contact_no`, `booking_date`, `time_slot`, `kids`, `rate_kids`, `total_kids`, `adults`, `rate_adults`, `total_adults`, `total_amount`, `discount`, `net_amount`, `created_at`, `updated_at`) VALUES
-(1, 'Vansh Joshi', '7069339178', '2025-01-16', '9 to 9', 2, 980.00, 1960.00, 3, 1400.00, 4200.00, 6160.00, 1000.00, 5160.00, '2025-01-28 00:52:01', '2025-01-28 00:52:01'),
-(2, 'Bhavik Rathod', '7069639785', '2025-01-18', '9 to 5', 3, 840.00, 2520.00, 7, 1200.00, 8400.00, 10920.00, 2000.00, 8920.00, '2025-01-28 01:16:49', '2025-01-28 01:16:49'),
-(3, 'Jay Mahakal', '8976545654', '2025-01-21', '09 to 05', 4, 849.00, 3396.00, 5, 1200.00, 6000.00, 9396.00, 1300.00, 8096.00, '2025-01-28 01:19:49', '2025-01-28 01:19:49'),
-(4, 'Rishi Solanki', '9809786578', '2025-01-23', '11 to 09', 5, 945.00, 4725.00, 8, 1350.00, 10800.00, 15525.00, 1000.00, 14525.00, '2025-01-28 01:46:35', '2025-01-28 01:46:35'),
-(5, 'Jayesh Vegda', '9809786578', '2025-01-15', '09 to 09', 5, 1000.00, 5000.00, 8, 1500.00, 12000.00, 17000.00, 1000.00, 16000.00, '2025-01-29 00:45:18', '2025-01-29 00:45:18'),
-(6, 'Mahendra Patel', '7069339178', '2025-01-31', '09 to 09', 5, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, '2025-01-29 03:49:19', '2025-01-29 03:49:19'),
-(7, 'Mahendra Patel', '7069339178', '2025-01-31', '09 to 09', 5, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, '2025-01-29 03:50:43', '2025-01-29 03:50:43'),
-(8, 'Mahendra Patel', '7069339178', '2025-01-31', '09 to 09', 5, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, '2025-01-29 03:51:30', '2025-01-29 03:51:30'),
-(9, 'Mahendra Patel', '7069339178', '2025-01-31', '09 to 09', 5, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, '2025-01-29 03:52:48', '2025-01-29 03:52:48'),
-(10, 'Vatsal Joshi', '8978974574', '2025-01-31', '11 to 09', 8, 945.00, 7560.00, 10, 1350.00, 13500.00, 21060.00, 0.00, 21060.00, '2025-01-29 03:55:50', '2025-01-29 03:55:50'),
-(11, 'Mehul Patel', '6369169375', '2025-01-15', '04 to 09', 3, 595.00, 1785.00, 5, 850.00, 4250.00, 6035.00, 0.00, 6035.00, '2025-01-29 03:58:26', '2025-01-29 03:58:26'),
-(12, 'Jayesh Patel', '6369169389', '2025-01-30', '09 to 05', 4, 840.00, 3360.00, 7, 1200.00, 8400.00, 11760.00, 0.00, 11760.00, '2025-01-29 04:07:09', '2025-01-29 04:07:09'),
-(13, 'Zeel Patel', '9099123456', '2025-02-21', '09 to 09', 5, 1050.00, 5250.00, 6, 1500.00, 9000.00, 14250.00, 0.00, 14250.00, '2025-02-01 03:16:17', '2025-02-01 03:16:17'),
-(14, 'Mukesh Sharma', '9999934334', '2025-02-13', '09 to 09', 3, 1050.00, 3150.00, 8, 1500.00, 12000.00, 15150.00, 0.00, 15150.00, '2025-02-03 00:59:56', '2025-02-03 00:59:56'),
-(15, 'Manish Mer', '8978974574', '2025-02-22', '09 to 09', 4, 1050.00, 4200.00, 5, 1500.00, 7500.00, 11700.00, 0.00, 11700.00, '2025-02-08 01:31:48', '2025-02-08 01:31:48'),
-(16, 'Pankaj Khokhariya', '9099123456', '2025-02-10', '09 to 09', 3, 1050.00, 3150.00, 10, 1500.00, 15000.00, 18150.00, 0.00, 18150.00, '2025-02-12 02:42:44', '2025-02-12 02:42:44'),
-(17, 'Dev Chauhan', '9987877882', '2025-02-13', '09 to 09', 2, 1050.00, 2100.00, 5, 1500.00, 7500.00, 9600.00, 0.00, 9600.00, '2025-02-12 03:23:49', '2025-02-12 03:23:49'),
-(21, 'Vatsal Jikandra', '7790787656', '2025-02-12', '09 to 05', 20, 840.00, 16800.00, 100, 1200.00, 120000.00, 136800.00, 2000.00, 134800.00, '2025-02-12 03:30:55', '2025-02-12 03:30:55'),
-(22, 'Dev Chauhan', '9987877882', '2025-02-13', '09 to 09', 2, 1050.00, 2100.00, 5, 1500.00, 7500.00, 9600.00, 1000.00, 8600.00, '2025-02-12 03:51:25', '2025-02-12 03:51:25'),
-(27, 'Vatsal Jikandra', '7790787656', '2025-02-12', '09 to 05', 20, 840.00, 16800.00, 100, 1200.00, 120000.00, 136800.00, 2000.00, 134800.00, '2025-02-12 03:57:44', '2025-02-12 03:57:44'),
-(28, 'Arun Panwar', '8734075816', '2025-01-01', '09 to 09', 5, 840.00, 4200.00, 10, 1200.00, 12000.00, 16200.00, 0.00, 16200.00, '2025-02-12 04:04:24', '2025-02-12 04:04:24'),
-(29, 'Jignesh Desai', '8989998877', '2025-01-12', '09 to 05', 2, 840.00, 1680.00, 6, 1200.00, 7200.00, 8880.00, 0.00, 8880.00, '2025-02-12 04:07:33', '2025-02-12 04:07:33'),
-(30, 'Jignesh Desai', '8989998877', '2025-01-12', '09 to 05', 2, 750.00, 1500.00, 6, 1200.00, 7200.00, 8700.00, 0.00, 8700.00, '2025-02-12 04:26:38', '2025-02-12 04:26:38'),
-(31, 'Akash Panwar', '8989998877', '2025-01-24', '09 to 09', 100, 980.00, 98000.00, 120, 1400.00, 168000.00, 266000.00, 5000.00, 261000.00, '2025-02-12 04:41:37', '2025-02-12 04:41:37'),
-(32, 'Vansh Joshi', '9099123456', '2025-01-23', '09 to 05', 2, 840.00, 1680.00, 2, 1200.00, 2400.00, 4080.00, 0.00, 4080.00, '2025-02-12 04:43:39', '2025-02-12 04:43:39'),
-(33, 'Mehul Patel', '6369169375', '2025-01-15', '04 to 09', 3, 840.00, 2520.00, 5, 1200.00, 6000.00, 8520.00, NULL, 8520.00, '2025-02-13 00:30:03', '2025-02-13 00:30:03'),
-(34, 'Vivek Makwana', '8978974574', '2025-03-04', '09 to 09', 3, 1050.00, 3150.00, 7, 1500.00, 10500.00, 13650.00, 0.00, 13650.00, '2025-03-04 00:16:01', '2025-03-04 00:16:01'),
-(35, 'K P Rajkumar', '9099123456', '2025-03-06', '09 to 09', 3, 1050.00, 3150.00, 9, 1500.00, 13500.00, 16650.00, 0.00, 16650.00, '2025-03-06 00:00:54', '2025-03-06 00:00:54'),
-(36, 'Jay Gandhi', '8909898789', '2025-03-07', '11 to 09', 3, 945.00, 2835.00, 10, 1350.00, 13500.00, 16335.00, 0.00, 16335.00, '2025-03-07 00:53:55', '2025-03-07 00:53:55'),
-(37, 'Kalpesh Bharwad', '7069339178', '2025-03-07', '09 to 09', 3, 1050.00, 3150.00, 9, 1500.00, 13500.00, 16650.00, 0.00, 16650.00, '2025-03-07 01:45:23', '2025-03-07 01:45:23'),
-(38, 'Mukesh Sharma', '7069339178', '2025-03-08', '09 to 09', 3, 1050.00, 3150.00, 7, 1500.00, 10500.00, 13650.00, 0.00, 13650.00, '2025-03-07 23:36:52', '2025-03-07 23:36:52'),
-(39, 'Divyesh Patel', '7069339178', '2025-03-16', '04 to 09', 3, 595.00, 1785.00, 7, 850.00, 5950.00, 7735.00, 0.00, 7735.00, '2025-03-16 08:16:48', '2025-03-16 08:16:48');
+INSERT INTO `bills` (`id`, `customer_name`, `contact_no`, `booking_date`, `time_slot`, `kids`, `extra_teachers`, `rate_kids`, `total_kids`, `adults`, `rate_adults`, `total_adults`, `total_amount`, `discount`, `net_amount`, `type`, `created_at`, `updated_at`) VALUES
+(1, 'Vansh Joshi', '7069339178', '2025-01-16', '9 to 9', 2, 0, 980.00, 1960.00, 3, 1400.00, 4200.00, 6160.00, 1000.00, 5160.00, NULL, '2025-01-28 00:52:01', '2025-01-28 00:52:01'),
+(2, 'Bhavik Rathod', '7069639785', '2025-01-18', '9 to 5', 3, 0, 840.00, 2520.00, 7, 1200.00, 8400.00, 10920.00, 2000.00, 8920.00, NULL, '2025-01-28 01:16:49', '2025-01-28 01:16:49'),
+(3, 'Jay Mahakal', '8976545654', '2025-01-21', '09 to 05', 4, 0, 849.00, 3396.00, 5, 1200.00, 6000.00, 9396.00, 1300.00, 8096.00, NULL, '2025-01-28 01:19:49', '2025-01-28 01:19:49'),
+(4, 'Rishi Solanki', '9809786578', '2025-01-23', '11 to 09', 5, 0, 945.00, 4725.00, 8, 1350.00, 10800.00, 15525.00, 1000.00, 14525.00, NULL, '2025-01-28 01:46:35', '2025-01-28 01:46:35'),
+(5, 'Jayesh Vegda', '9809786578', '2025-01-15', '09 to 09', 5, 0, 1000.00, 5000.00, 8, 1500.00, 12000.00, 17000.00, 1000.00, 16000.00, NULL, '2025-01-29 00:45:18', '2025-01-29 00:45:18'),
+(6, 'Mahendra Patel', '7069339178', '2025-01-31', '09 to 09', 5, 0, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, NULL, '2025-01-29 03:49:19', '2025-01-29 03:49:19'),
+(7, 'Mahendra Patel', '7069339178', '2025-01-31', '09 to 09', 5, 0, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, NULL, '2025-01-29 03:50:43', '2025-01-29 03:50:43'),
+(8, 'Mahendra Patel', '7069339178', '2025-01-31', '09 to 09', 5, 0, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, NULL, '2025-01-29 03:51:30', '2025-01-29 03:51:30'),
+(9, 'Mahendra Patel', '7069339178', '2025-01-31', '09 to 09', 5, 0, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, NULL, '2025-01-29 03:52:48', '2025-01-29 03:52:48'),
+(10, 'Vatsal Joshi', '8978974574', '2025-01-31', '11 to 09', 8, 0, 945.00, 7560.00, 10, 1350.00, 13500.00, 21060.00, 0.00, 21060.00, NULL, '2025-01-29 03:55:50', '2025-01-29 03:55:50'),
+(11, 'Mehul Patel', '6369169375', '2025-01-15', '04 to 09', 3, 0, 595.00, 1785.00, 5, 850.00, 4250.00, 6035.00, 0.00, 6035.00, NULL, '2025-01-29 03:58:26', '2025-01-29 03:58:26'),
+(12, 'Jayesh Patel', '6369169389', '2025-01-30', '09 to 05', 4, 0, 840.00, 3360.00, 7, 1200.00, 8400.00, 11760.00, 0.00, 11760.00, NULL, '2025-01-29 04:07:09', '2025-01-29 04:07:09'),
+(13, 'Zeel Patel', '9099123456', '2025-02-21', '09 to 09', 5, 0, 1050.00, 5250.00, 6, 1500.00, 9000.00, 14250.00, 0.00, 14250.00, NULL, '2025-02-01 03:16:17', '2025-02-01 03:16:17'),
+(14, 'Mukesh Sharma', '9999934334', '2025-02-13', '09 to 09', 3, 0, 1050.00, 3150.00, 8, 1500.00, 12000.00, 15150.00, 0.00, 15150.00, NULL, '2025-02-03 00:59:56', '2025-02-03 00:59:56'),
+(15, 'Manish Mer', '8978974574', '2025-02-22', '09 to 09', 4, 0, 1050.00, 4200.00, 5, 1500.00, 7500.00, 11700.00, 0.00, 11700.00, NULL, '2025-02-08 01:31:48', '2025-02-08 01:31:48'),
+(16, 'Pankaj Khokhariya', '9099123456', '2025-02-10', '09 to 09', 3, 0, 1050.00, 3150.00, 10, 1500.00, 15000.00, 18150.00, 0.00, 18150.00, NULL, '2025-02-12 02:42:44', '2025-02-12 02:42:44'),
+(17, 'Dev Chauhan', '9987877882', '2025-02-13', '09 to 09', 2, 0, 1050.00, 2100.00, 5, 1500.00, 7500.00, 9600.00, 0.00, 9600.00, NULL, '2025-02-12 03:23:49', '2025-02-12 03:23:49'),
+(21, 'Vatsal Jikandra', '7790787656', '2025-02-12', '09 to 05', 20, 0, 840.00, 16800.00, 100, 1200.00, 120000.00, 136800.00, 2000.00, 134800.00, NULL, '2025-02-12 03:30:55', '2025-02-12 03:30:55'),
+(22, 'Dev Chauhan', '9987877882', '2025-02-13', '09 to 09', 2, 0, 1050.00, 2100.00, 5, 1500.00, 7500.00, 9600.00, 1000.00, 8600.00, NULL, '2025-02-12 03:51:25', '2025-02-12 03:51:25'),
+(27, 'Vatsal Jikandra', '7790787656', '2025-02-12', '09 to 05', 20, 0, 840.00, 16800.00, 100, 1200.00, 120000.00, 136800.00, 2000.00, 134800.00, NULL, '2025-02-12 03:57:44', '2025-02-12 03:57:44'),
+(28, 'Arun Panwar', '8734075816', '2025-01-01', '09 to 09', 5, 0, 840.00, 4200.00, 10, 1200.00, 12000.00, 16200.00, 0.00, 16200.00, NULL, '2025-02-12 04:04:24', '2025-02-12 04:04:24'),
+(29, 'Jignesh Desai', '8989998877', '2025-01-12', '09 to 05', 2, 0, 840.00, 1680.00, 6, 1200.00, 7200.00, 8880.00, 0.00, 8880.00, NULL, '2025-02-12 04:07:33', '2025-02-12 04:07:33'),
+(30, 'Jignesh Desai', '8989998877', '2025-01-12', '09 to 05', 2, 0, 750.00, 1500.00, 6, 1200.00, 7200.00, 8700.00, 0.00, 8700.00, NULL, '2025-02-12 04:26:38', '2025-02-12 04:26:38'),
+(31, 'Akash Panwar', '8989998877', '2025-01-24', '09 to 09', 100, 0, 980.00, 98000.00, 120, 1400.00, 168000.00, 266000.00, 5000.00, 261000.00, NULL, '2025-02-12 04:41:37', '2025-02-12 04:41:37'),
+(32, 'Vansh Joshi', '9099123456', '2025-01-23', '09 to 05', 2, 0, 840.00, 1680.00, 2, 1200.00, 2400.00, 4080.00, 0.00, 4080.00, NULL, '2025-02-12 04:43:39', '2025-02-12 04:43:39'),
+(33, 'Mehul Patel', '6369169375', '2025-01-15', '04 to 09', 3, 0, 840.00, 2520.00, 5, 1200.00, 6000.00, 8520.00, NULL, 8520.00, NULL, '2025-02-13 00:30:03', '2025-02-13 00:30:03'),
+(34, 'Vivek Makwana', '8978974574', '2025-03-04', '09 to 09', 3, 0, 1050.00, 3150.00, 7, 1500.00, 10500.00, 13650.00, 0.00, 13650.00, NULL, '2025-03-04 00:16:01', '2025-03-04 00:16:01'),
+(35, 'K P Rajkumar', '9099123456', '2025-03-06', '09 to 09', 3, 0, 1050.00, 3150.00, 9, 1500.00, 13500.00, 16650.00, 0.00, 16650.00, NULL, '2025-03-06 00:00:54', '2025-03-06 00:00:54'),
+(36, 'Jay Gandhi', '8909898789', '2025-03-07', '11 to 09', 3, 0, 945.00, 2835.00, 10, 1350.00, 13500.00, 16335.00, 0.00, 16335.00, NULL, '2025-03-07 00:53:55', '2025-03-07 00:53:55'),
+(37, 'Kalpesh Bharwad', '7069339178', '2025-03-07', '09 to 09', 3, 0, 1050.00, 3150.00, 9, 1500.00, 13500.00, 16650.00, 0.00, 16650.00, NULL, '2025-03-07 01:45:23', '2025-03-07 01:45:23'),
+(38, 'Mukesh Sharma', '7069339178', '2025-03-08', '09 to 09', 3, 0, 1050.00, 3150.00, 7, 1500.00, 10500.00, 13650.00, 0.00, 13650.00, NULL, '2025-03-07 23:36:52', '2025-03-07 23:36:52'),
+(39, 'Divyesh Patel', '7069339178', '2025-03-16', '04 to 09', 3, 0, 595.00, 1785.00, 7, 850.00, 5950.00, 7735.00, 0.00, 7735.00, NULL, '2025-03-16 08:16:48', '2025-03-16 08:16:48'),
+(40, 'Shantilal Patel', '8734075816', '2025-03-21', '09 to 09', 5, 0, 1050.00, 5250.00, 10, 1500.00, 15000.00, 20250.00, 0.00, 20250.00, NULL, '2025-03-20 00:44:47', '2025-03-20 00:44:47'),
+(41, 'Kishan Patel', '7069339178', '2025-03-20', '04 to 09', 3, 0, 595.00, 1785.00, 5, 850.00, 4250.00, 6035.00, 0.00, 6035.00, NULL, '2025-03-20 01:23:17', '2025-03-20 01:23:17'),
+(42, 'Sharda Vidhyalay', '8934213459', '2025-03-20', '9:30 to 05 (RS.675)', 150, 3, 675.00, 101250.00, 10, 400.00, 1200.00, 102450.00, 0.00, 102450.00, NULL, '2025-03-20 01:50:23', '2025-03-20 01:50:23'),
+(43, 'Podar International School', '9765676555', '2025-03-20', '9:30 to 05 (RS.700)', 150, 3, 700.00, 105000.00, 10, 400.00, 1200.00, 106200.00, 0.00, 106200.00, 'school_booking', '2025-03-20 02:03:32', '2025-03-20 02:03:32'),
+(44, 'Priyank Patel', '9765676555', '2025-03-20', '09 to 09', 3, 0, 1050.00, 3150.00, 11, 1500.00, 16500.00, 19650.00, 0.00, 19650.00, 'booking', '2025-03-20 03:28:45', '2025-03-20 03:28:45'),
+(45, 'Kesli Primary School', '9765676555', '2025-03-20', '9:30 to 05 (RS.675)', 60, 0, 675.00, 40500.00, 3, 400.00, 0.00, 40500.00, 0.00, 40500.00, 'school_booking', '2025-03-20 03:29:45', '2025-03-20 03:29:45');
 
 -- --------------------------------------------------------
 
@@ -243,7 +251,7 @@ INSERT INTO `bills` (`id`, `customer_name`, `contact_no`, `booking_date`, `time_
 CREATE TABLE `bookings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `cn` varchar(255) NOT NULL,
+  `cn` varchar(13) NOT NULL,
   `acn` varchar(255) NOT NULL,
   `date` date NOT NULL,
   `time` varchar(255) NOT NULL,
@@ -285,7 +293,10 @@ INSERT INTO `bookings` (`id`, `name`, `cn`, `acn`, `date`, `time`, `kids`, `adul
 (24, 'K P Rajkumar', '9099123456', '7656789876', '2025-03-06', '09 to 09', 3, 9, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, NULL, '2025-03-06 00:00:54', '2025-03-06 00:00:54'),
 (26, 'Kalpesh Bharwad', '7069339178', '8238173533', '2025-03-07', '09 to 09', 3, 9, 1050.00, 1500.00, 16650.00, 0.00, 0.00, 16650.00, 'Checked In', '2025-03-07 01:45:22', '2025-03-07 01:45:22'),
 (27, 'Mukesh Sharma', '7069339178', '7656789876', '2025-03-08', '09 to 09', 3, 7, 1050.00, 1500.00, 13650.00, 0.00, 0.00, 13650.00, 'Checked In', '2025-03-07 23:36:52', '2025-03-07 23:36:52'),
-(28, 'Divyesh Patel', '7069339178', '7069141829', '2025-03-16', '04 to 09', 3, 7, 595.00, 850.00, 7735.00, 0.00, 0.00, 7735.00, 'Checked In', '2025-03-16 08:16:47', '2025-03-16 08:16:47');
+(28, 'Divyesh Patel', '7069339178', '7069141829', '2025-03-16', '04 to 09', 3, 7, 595.00, 850.00, 7735.00, 0.00, 0.00, 7735.00, 'Checked In', '2025-03-16 08:16:47', '2025-03-16 08:16:47'),
+(29, 'Shantilal Patel', '8734075816', '7487806760', '2025-03-21', '09 to 09', 5, 10, 1050.00, 1500.00, 20250.00, 0.00, 0.00, 20250.00, 'Pending', '2025-03-20 00:44:46', '2025-03-20 00:44:46'),
+(30, 'Kishan Patel', '7069339178', '9879572544', '2025-03-20', '04 to 09', 3, 5, 595.00, 850.00, 6035.00, 0.00, 0.00, 6035.00, 'Checked In', '2025-03-20 01:23:16', '2025-03-20 01:23:16'),
+(31, 'Priyank Patel', '9765676555', '7487806760', '2025-03-20', '09 to 09', 3, 11, 1050.00, 1500.00, 19650.00, 0.00, 0.00, 19650.00, 'Checked In', '2025-03-20 03:28:44', '2025-03-20 03:28:44');
 
 -- --------------------------------------------------------
 
@@ -346,6 +357,43 @@ CREATE TABLE `cache_locks` (
   `owner` varchar(255) NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customers`
+--
+
+CREATE TABLE `customers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `mobile` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`id`, `name`, `mobile`, `email`, `address`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Veeraj Varmora', '9898787678', 'vv@gmail.com', 'Vadodara, GJ', '1234321', NULL, '2025-03-19 02:57:08', '2025-03-19 02:57:08'),
+(2, 'Dhruv Pokar', '9893458432', 'dpkr@gmail.com', 'Kadodara, GJ', '123456', NULL, '2025-03-19 03:17:36', '2025-03-19 03:17:36'),
+(3, 'Kaushik Manani', '9879012433', 'kaushik@gmail.com', 'Kadodara, GJ', '12345678', NULL, '2025-03-19 03:18:41', '2025-03-19 03:18:41'),
+(4, 'Shantilal Patel', '8734075816', 'ssp@gmail.com', 'Navsari, GJ', '123321', NULL, '2025-03-19 04:13:34', '2025-03-19 04:13:34'),
+(5, 'Harshit Patel', '8989998877', 'hp@gmail.com', 'Borivali, MH', '1234321', NULL, '2025-03-19 05:02:42', '2025-03-19 05:02:42'),
+(6, 'Darshan Patel', '7876665544', 'darshan@gmail.com', 'Halol, GJ', '12345654321', NULL, '2025-03-19 05:11:00', '2025-03-19 05:11:00'),
+(7, 'Jay Patel', '9099123456', 'jp@gmail.com', 'Chikhli, GJ', '654321', NULL, '2025-03-19 05:26:55', '2025-03-19 05:26:55'),
+(8, 'Navjot Pandya', '8098787654', 'np@gmail.com', 'Mohali, PB', '7654321', NULL, '2025-03-19 05:30:58', '2025-03-19 05:30:58'),
+(9, 'Bhailal Morya', '9099123455', 'mb@gmail.com', 'Vapi, GJ', '876543', NULL, '2025-03-19 05:32:50', '2025-03-19 05:32:50'),
+(10, 'Vivek Makwana', '8347547675', 'mv@gmail.com', 'Valsad, GJ', '987654', NULL, '2025-03-19 05:34:54', '2025-03-19 05:34:54'),
+(11, 'Patel Kishan Shantilal', '7069339178', 'kishanpatel9602@gmail.com', 'Kutch Vijay Saw-Mill, NH 48, Samroli, Chikhli', '$2y$12$bHxpDjRPLQzRLTI4nFJo7OezP7zQEUKuOXP58WDzndv5oFcRnh4/m', NULL, '2025-03-20 03:07:09', '2025-03-20 03:07:09'),
+(12, 'Mahesh Bhai Gajera', '8976543456', 'mg@gmail.com', 'Sahyog Society, Chikhli', '$2y$12$0UqvITAsU4i6iA2pM4I44eKAGFdJE5G018ve9G43NRdu/h6Q6M39y', NULL, '2025-03-20 03:17:43', '2025-03-20 03:17:43'),
+(13, 'Priyank Patel', '9765676555', 'pp@gmail.com', 'Kesli, Chikhli, GJ', '$2y$12$LhLTk0P5goGxtNVjbXf5NedXoEb77gEf.UuXCa/c/prVsLUcKiBua', NULL, '2025-03-20 03:23:44', '2025-03-20 03:23:44');
 
 -- --------------------------------------------------------
 
@@ -423,7 +471,8 @@ INSERT INTO `enquiry` (`id`, `name`, `email`, `mobileno`, `message`, `handled`, 
 (2, 'Rishi Solanki', 'rs@gmail.com', '8989097653', 'I have already done booking but we want Jain food. If possible then contact me on my number I will know how much people for jain food', 1, '2025-01-21 00:54:52', '2025-03-17 00:40:33'),
 (3, 'Manish Joshi', 'mm@gmail.com', '7809767654', 'Hello Sir,\r\nWe are 20 peoples can you arrange any discounts', 1, '2025-01-23 01:55:07', '2025-03-17 00:40:37'),
 (4, 'Mukesh Maru', 'mm@gmail.com', '7809767654', 'Hello sir good morning', 1, '2025-01-23 01:56:45', '2025-03-17 00:40:40'),
-(5, 'Divyesh Patel', 'dp@gmail.com', '7069141829', 'Hello sir, I have opt package of 4 to 9 for 7 people but our plan has been changed we are coming 10 people. So please look into this matter', 1, '2025-03-17 00:42:26', '2025-03-17 00:46:42');
+(5, 'Divyesh Patel', 'dp@gmail.com', '7069141829', 'Hello sir, I have opt package of 4 to 9 for 7 people but our plan has been changed we are coming 10 people. So please look into this matter', 1, '2025-03-17 00:42:26', '2025-03-17 00:46:42'),
+(6, 'Jay Mahakal', 'jm@gmail.com', '8978974574', 'I want to postpone my date for 20 March for my wedding', 1, '2025-03-17 03:44:05', '2025-03-17 03:44:40');
 
 -- --------------------------------------------------------
 
@@ -694,7 +743,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (43, '2025_02_24_062743_create_investments_table', 30),
 (44, '2025_02_24_062744_create_daily_expenses_table', 30),
 (45, '2025_03_17_063425_create_gallery_table', 31),
-(46, '2025_03_17_075122_create_packages_table', 32);
+(46, '2025_03_17_075122_create_packages_table', 32),
+(47, '2025_03_19_081930_create_customers_table', 33),
+(48, '2025_03_20_064402_add_extra_teachers_to_bills_table', 34);
 
 -- --------------------------------------------------------
 
@@ -777,7 +828,7 @@ CREATE TABLE `packages` (
 --
 
 INSERT INTO `packages` (`id`, `time`, `details`, `price`, `type`, `created_at`, `updated_at`) VALUES
-(1, '09:00 AM To 9:00 PM', 'Breakfast, Lunch, HiTea & Dinner', 1500.00, 'picnic', '2025-03-17 02:30:06', '2025-03-17 03:07:08'),
+(1, '09:00 AM To 9:00 PM', 'Breakfast, Lunch, HiTea & Dinner', 1500.00, 'picnic', '2025-03-17 02:30:06', '2025-03-17 03:55:45'),
 (3, '09:00 AM To 5:00 PM', 'Breakfast, Lunch, HiTea', 1200.00, 'picnic', '2025-03-17 02:32:37', '2025-03-17 02:43:43'),
 (5, '11:00 AM To 9:00 PM', 'Lunch, HiTea & Dinner', 1350.00, 'picnic', '2025-03-17 02:35:04', '2025-03-17 02:44:14'),
 (6, '04:00 PM To 9:00 PM', 'HiTea & Dinner', 850.00, 'picnic', '2025-03-17 02:47:45', '2025-03-17 02:47:45'),
@@ -1027,7 +1078,13 @@ INSERT INTO `school_booking` (`id`, `admin_id`, `sname`, `addr`, `cn`, `date`, `
 (7, NULL, 'D.E Italia High School', 'Chikhli', '7069141820', '2025-02-11', '9:30 to 05 (RS.700)', 60, 4, 0.00, 0.00, 0.00, 0.00, 0.00, NULL, '2025-02-12 02:07:52', '2025-02-12 02:07:52'),
 (8, NULL, 'New Primary School', 'Chikhli Market', '9099090909', '2025-02-01', '9:30 to 09 (RS.900)', 49, 2, 0.00, 0.00, 0.00, 0.00, 0.00, NULL, '2025-02-12 02:25:19', '2025-02-12 02:25:19'),
 (9, 1, 'Jay Ambe International School', 'Near Phooldevi Mata temple, Samroli', '8934213459', '2025-03-06', '9:30 to 05 (RS.700)', 90, 3, 700.00, 63000.00, 0.00, 3000.00, 60000.00, NULL, '2025-03-06 00:19:47', '2025-03-06 00:19:47'),
-(10, 1, 'Jay Ambe International School', 'Near Phooldevi Mata temple, Samroli', '8989998877', '2025-03-07', '9:30 to 05 (RS.675)', 100, 5, 675.00, 67500.00, 35000.00, 500.00, 67000.00, 'Checked In', '2025-03-07 01:35:48', '2025-03-07 01:35:48');
+(10, 1, 'Jay Ambe International School', 'Near Phooldevi Mata temple, Samroli', '8989998877', '2025-03-07', '9:30 to 05 (RS.675)', 100, 5, 675.00, 67500.00, 35000.00, 500.00, 67000.00, 'Checked In', '2025-03-07 01:35:48', '2025-03-07 01:35:48'),
+(11, NULL, 'ABC Kids School', 'Katargam, Surat', '8734075816', '2025-03-20', '9:30 to 05 (RS.675)', 40, 3, 675.00, 27400.00, 19180.00, 0.00, 27400.00, 'Checked In', '2025-03-20 00:59:04', '2025-03-20 00:59:04'),
+(12, NULL, 'Kinder Kids School', 'Dhakvada, Bilimora', '8734075816', '2025-03-20', '9:30 to 05 (RS.675)', 60, 4, 675.00, 40900.00, 12270.00, 0.00, 40900.00, 'Checked In', '2025-03-20 01:21:40', '2025-03-20 01:21:40'),
+(13, NULL, 'Bilimora International School', 'Gandevi-Chikhli Road, Gandevi', '8934213459', '2025-03-20', '9:30 to 05 (RS.700)', 100, 6, 700.00, 70400.00, 21120.00, 0.00, 70400.00, 'Checked In', '2025-03-20 01:31:19', '2025-03-20 01:31:19'),
+(14, NULL, 'Sharda Vidhyalay', 'College Road, Chikhli', '8934213459', '2025-03-20', '9:30 to 05 (RS.675)', 150, 10, 675.00, 102450.00, 30735.00, 0.00, 102450.00, 'Checked In', '2025-03-20 01:50:22', '2025-03-20 01:50:22'),
+(15, NULL, 'Podar International School', 'Italva Road, Navsari', '9765676555', '2025-03-20', '9:30 to 05 (RS.700)', 150, 10, 700.00, 106200.00, 31860.00, 0.00, 106200.00, 'Checked In', '2025-03-20 02:03:31', '2025-03-20 02:03:31'),
+(16, NULL, 'Kesli Primary School', 'Kesli, Chikhli, GJ', '9765676555', '2025-03-20', '9:30 to 05 (RS.675)', 60, 3, 675.00, 40500.00, 12150.00, 0.00, 40500.00, 'Checked In', '2025-03-20 03:29:45', '2025-03-20 03:29:45');
 
 -- --------------------------------------------------------
 
@@ -1049,7 +1106,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('Ed9H490rFABVRoRM29v8TWzNbg93VvI1xfvSPpzB', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiMW5uYks5NlAxQUNOczExYTJub2ZsTmNpSE42VXFLTGFFWTY1MUp4WiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9wYWNrYWdlcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTI6ImxvZ2luX2FkbWluXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1742201367);
+('0cs6cQNvhEjZXa0PBmegVJSR63rsVpIT8fohw6qk', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTozOntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiM0tuNFp4cnpFTHAyUzIwOHBBT01wSmhJZVdBZnhwMGdENHU2MFZueSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fX0=', 1742619896),
+('bnQc7OLYdZZ2OFAnyXPE4X7btWX9LOoYYwTRtcUz', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il9mbGFzaCI7YToyOntzOjM6Im5ldyI7YTowOnt9czozOiJvbGQiO2E6MDp7fX1zOjY6Il90b2tlbiI7czo0MDoiS2JWOFY1UzRxNnhRY3dianNGc0h2ZmZDR0ZyZTBYTENQRDR6clBLYyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9wYWNrYWdlcyI7fXM6NTI6ImxvZ2luX2FkbWluXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjQ6InVzZXIiO2E6NDp7czoyOiJpZCI7aTo0O3M6NDoibmFtZSI7czoxNToiU2hhbnRpbGFsIFBhdGVsIjtzOjY6Im1vYmlsZSI7czoxMDoiODczNDA3NTgxNiI7czo1OiJlbWFpbCI7czoxMzoic3NwQGdtYWlsLmNvbSI7fX0=', 1742587532);
 
 -- --------------------------------------------------------
 
@@ -1090,7 +1148,9 @@ INSERT INTO `staff` (`id`, `name`, `address`, `aadhar_no`, `contact_no`, `salary
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
+  `mobile` varchar(10) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `address` varchar(500) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
@@ -1186,6 +1246,14 @@ ALTER TABLE `cache`
 --
 ALTER TABLE `cache_locks`
   ADD PRIMARY KEY (`key`);
+
+--
+-- Indexes for table `customers`
+--
+ALTER TABLE `customers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `customers_mobile_unique` (`mobile`),
+  ADD UNIQUE KEY `customers_email_unique` (`email`);
 
 --
 -- Indexes for table `daily_expenses`
@@ -1341,7 +1409,8 @@ ALTER TABLE `staff`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `mobile` (`mobile`);
 
 --
 -- Indexes for table `withdrawals`
@@ -1382,19 +1451,25 @@ ALTER TABLE `attandances`
 -- AUTO_INCREMENT for table `bills`
 --
 ALTER TABLE `bills`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `booking_room`
 --
 ALTER TABLE `booking_room`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `customers`
+--
+ALTER TABLE `customers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `daily_expenses`
@@ -1412,7 +1487,7 @@ ALTER TABLE `daily_incomes`
 -- AUTO_INCREMENT for table `enquiry`
 --
 ALTER TABLE `enquiry`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1454,7 +1529,7 @@ ALTER TABLE `kitchen_purchase_items`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `occupied_rooms`
@@ -1508,7 +1583,7 @@ ALTER TABLE `salaries`
 -- AUTO_INCREMENT for table `school_booking`
 --
 ALTER TABLE `school_booking`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `staff`
