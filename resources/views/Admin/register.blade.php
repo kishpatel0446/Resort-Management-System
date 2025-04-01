@@ -4,95 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Registration</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fc;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .registration-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            
-        }
-
-        h1 {
-            text-align: center;
-            color: #0044cc;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-size: 1rem;
-            color: #444;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
-            border-color: #0044cc;
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #0044cc;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #0033a0;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 0.875rem;
-            margin-top: -10px;
-            margin-bottom: 20px;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.875rem;
-            color: #555;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body>
-    <div class="registration-container">
-        <h1>Ambik Riverside Camp & Resorts, Kachholi</h1>
+<body style="background: linear-gradient(135deg, rgb(35, 59, 212), rgb(1, 29, 89)); min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-y: auto;">
 
-        <!-- Display Validation Errors -->
+    <div class="card p-4 shadow-lg rounded"
+         style="width: 100%; max-width: 400px; background: rgba(255, 255, 255, 0.95); border-radius: 15px; margin: auto;">
+
+        <div class="text-center">
+            <img src="{{ asset('img/37.png') }}" alt="Admin Registration" width="80">
+        </div>
+
+        <h2 class="text-center text-primary mt-2 fw-bold">Admin Registration</h2>
+
         @if ($errors->any())
-            <div class="error-message">
-                <ul>
+            <div class="alert alert-danger">
+                <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -100,32 +27,74 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.register') }}" method="POST">
+        <form action="{{ route('admin.register') }}" method="POST" class="mt-3">
             @csrf
-            <div>
-                <label for="name">Name:</label>
-                <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+            <div class="mb-3">
+                <label for="name" class="form-label fw-bold">👤 Name</label>
+                <input type="text" id="name" name="name" class="form-control rounded-pill" value="{{ old('name') }}" required placeholder="Enter your name">
             </div>
-            <div>
-                <label for="email">Email:</label>
-                <input type="email" name="email" id="email" value="{{ old('email') }}" required>
+
+            <div class="mb-3">
+                <label for="email" class="form-label fw-bold">📧 Email Address</label>
+                <input type="email" id="email" name="email" class="form-control rounded-pill" value="{{ old('email') }}" required placeholder="Enter your email">
             </div>
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password" required>
+
+            <div class="mb-3">
+                <label for="password" class="form-label fw-bold">🔑 Password</label>
+                <input type="password" id="password" name="password" class="form-control rounded-pill" required placeholder="Enter password">
             </div>
-            <div>
-                <label for="password_confirmation">Confirm Password:</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" required>
+
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label fw-bold">🔑 Confirm Password</label>
+                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control rounded-pill" required placeholder="Confirm password">
             </div>
-            <div>
-                <button type="submit">Register</button>
-            </div>
+
+            <button type="submit" class="btn btn-primary w-100 fw-bold rounded-pill">
+                ✅ Register
+            </button>
         </form>
 
-        <div class="footer">
+        <p class="text-center mt-3">
+            Already have an account? 
+            <a href="{{ route('admin.login') }}" class="text-decoration-none fw-bold">Login Here</a>
+        </p>
+
+        <div class="text-center text-secondary mt-2">
             <p>© 2025 Ambik Riverside Camp & Resorts, Kachholi</p>
         </div>
     </div>
+
+    <style>
+        .card {
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        input::placeholder {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .btn-primary {
+            background-color: #004e92;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #002c58;
+        }
+
+        h2 {
+            font-weight: 800;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
